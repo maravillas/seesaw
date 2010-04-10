@@ -6,4 +6,6 @@
 		 [spectator/spectator "1.0.0"]]
   :dev-dependencies [[ant/ant "1.6.5"]
                      [ant/ant-launcher "1.6.5"]
-                     [leiningen/lein-swank "1.2.0-SNAPSHOT"]])
+                     [leiningen/lein-swank "1.2.0-SNAPSHOT"]
+		     [lein-clojars "0.5.0"]]
+  :repositories [["clojars" "http://clojars.org/repo"]])
