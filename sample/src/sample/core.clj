@@ -7,8 +7,8 @@
 	   [javax.swing JFrame]
 	   [org.apache.log4j BasicConfigurator]))
 
-(defn parse-float [str]
-  (try (Float/parseFloat str) 
+(defn parse-int [str]
+  (try (Integer/parseInt str) 
        (catch NumberFormatException ex 0)))
 
 (defn fahrenheit-to-celsius [f]
@@ -22,21 +22,19 @@
   (javax.swing.UIManager/setLookAndFeel (javax.swing.UIManager/getSystemLookAndFeelClassName))
   (let [context (make-context)
 	frame (frame "Seesaw Sample")
-	c-check (checkbox context :celsius)
-	f-check (checkbox context :fahrenheit)]
+	celsius (textfield context :celsius 5)
+	fahrenheit (textfield context :fahrenheit 5)]
     (add-updater! context (fn [old new]
-			    {:celsius (:fahrenheit new)})
-			    ;{:celsius (fahrenheit-to-celsius (:fahrenheit new))})
+			    {:celsius (str (fahrenheit-to-celsius (parse-int (:fahrenheit new))))})
 		  :fahrenheit)
     (add-updater! context (fn [old new]
-			    {:fahrenheit (:celsius new)})
-			    ;{:fahrenheit (celsius-to-fahrenheit (:celsius new))})
+			    {:fahrenheit (str (celsius-to-fahrenheit (parse-int (:celsius new))))})
 		  :celsius)
     (doto frame
       (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
       (.setLayout (FlowLayout.))
-      (.add f-check)
-      (.add c-check)
+      (.add fahrenheit)
+      (.add celsius)
       .pack
       .show)))
     
