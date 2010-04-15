@@ -1,7 +1,7 @@
 (ns seesaw.core
   (:use [seesaw listeners spectator])
   (:use [clojure.contrib swing-utils logging])
-  (:import [javax.swing JCheckBox JFrame]))
+  (:import [javax.swing JCheckBox JTextField JFrame]))
 
 (defn make-component-observer [key get-state set-state component]
   (fn [old new]
@@ -38,6 +38,33 @@
      (watch-checkbox (JCheckBox. arg0 arg1) context key))
   ([context key arg0 arg1 arg2]
      (watch-checkbox (JCheckBox. arg0 arg1 arg2) context key)))
+
+(defn- textfield-value [textfield]
+  (.getText textfield))
+
+(defn- set-textfield [textfield text]
+  (.setText textfield text))
+
+(defn watch-textfield [component context key]
+  (add-document-listener (.getDocument component)
+			 {:changed update-from-event!
+			  :insert update-from-event!
+			  :delete update-from-event!}
+			 context key #(textfield-value component))
+  (update! context {key (textfield-value component)} true)
+  (let [observer (make-component-observer key textfield-value set-textfield component)]
+    (add-observer! context observer key))
+  component)
+
+(defn textfield
+  ([context key]
+     (watch-textfield (JTextField.) context key))
+  ([context key arg0]
+     (watch-textfield (JTextField. arg0) context key))
+  ([context key arg0 arg1]
+     (watch-textfield (JTextField. arg0 arg1) context key))
+  ([context key arg0 arg1 arg2]
+     (watch-textfield (JTextField. arg0 arg1 arg2) context key)))
 
 (defn frame
   ([]
