@@ -23,7 +23,9 @@
   (let [context (make-context)
 	frame (frame "Seesaw Sample")
 	celsius (textfield context :celsius 5)
-	fahrenheit (textfield context :fahrenheit 5)]
+	fahrenheit (textfield context :fahrenheit 5)
+	celsius-label (label "Celsius:")
+	fahrenheit-label (label "Fahrenheit:")]
     (add-updater! context (fn [old new]
 			    {:celsius (str (fahrenheit-to-celsius (parse-int (:fahrenheit new))))})
 		  :fahrenheit)
@@ -33,7 +35,9 @@
     (doto frame
       (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
       (.setLayout (FlowLayout.))
+      (.add fahrenheit-label)
       (.add fahrenheit)
+      (.add celsius-label)
       (.add celsius)
       .pack
       .show)))
