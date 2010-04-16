@@ -23,12 +23,10 @@
 ;;;;;;;;;;;;;;;;;;;; Components with watches ;;;;;;;;;;;;;;;;;;;;
 
 (defn- checkbox-selected? [checkbox]
-  (let [model (.. checkbox getModel)]
-    (.isSelected model)))
+  (.. checkbox getModel isSelected))
 
 (defn- select-checkbox [checkbox selected]
-  (let [model (.. checkbox getModel)]
-    (.setSelected checkbox selected)))
+  (.setSelected checkbox selected))
 
 (defwatch watch-checkbox
   checkbox-selected?
