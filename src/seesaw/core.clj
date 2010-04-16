@@ -12,6 +12,14 @@
   [_ context key value-fn]
   (update! context {key (value-fn)}))
 
+(defmacro defwatch [name get-state set-state add-listener]
+  `(defn ~name [component# context# key#]
+     (apply ~add-listener [component# context# key#])
+     (update! context# {key# (~get-state component#)} true)
+     (let [observer# (make-component-observer key# ~get-state ~set-state component#)]
+       (add-observer! context# observer# key#))
+     component#))
+
 ;;;;;;;;;;;;;;;;;;;; Components with watches ;;;;;;;;;;;;;;;;;;;;
 
 (defn- checkbox-selected? [checkbox]
@@ -22,12 +30,12 @@
   (let [model (.. checkbox getModel)]
     (.setSelected checkbox selected)))
 
-(defn watch-checkbox [component context key]
-  (add-change-listener component update-from-event! context key #(checkbox-selected? component))
-  (update! context {key (checkbox-selected? component)} true)
-  (let [observer (make-component-observer key checkbox-selected? select-checkbox component)]
-    (add-observer! context observer key))
-  component)
+(defwatch watch-checkbox
+  checkbox-selected?
+  select-checkbox
+  (fn [component context key]
+    (add-change-listener component update-from-event!
+			 context key #(checkbox-selected? component))))
 
 (defn checkbox 
   ([context key]
@@ -44,6 +52,16 @@
 
 (defn- set-textfield [textfield text]
   (.setText textfield text))
+
+(defwatch watch-textfield
+  textfield-value
+  set-textfield
+  (fn [component context key]
+    (add-document-listener (.getDocument component)
+			   {:changed update-from-event!
+			    :insert update-from-event!
+			    :delete update-from-event!}
+			   context key #(textfield-value component))))
 
 (defn watch-textfield [component context key]
   (add-document-listener (.getDocument component)
