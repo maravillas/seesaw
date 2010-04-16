@@ -1,7 +1,7 @@
 (ns seesaw.core
   (:use [seesaw listeners spectator])
   (:use [clojure.contrib swing-utils logging])
-  (:import [javax.swing JCheckBox JTextField JFrame]))
+  (:import [javax.swing JCheckBox JTextField JFrame JLabel]))
 
 (defn make-component-observer [key get-state set-state component]
   (fn [old new]
@@ -82,6 +82,8 @@
   ([context key arg0 arg1 arg2]
      (watch-textfield (JTextField. arg0 arg1 arg2) context key)))
 
+;;;;;;;;;;;;;;;;;;;; Components with no watches ;;;;;;;;;;;;;;;;;;;;
+
 (defn frame
   ([]
      (JFrame.))
@@ -89,3 +91,13 @@
      (JFrame. arg0))
   ([arg0 arg1]
      (JFrame. arg0 arg1)))
+
+(defn label
+  ([]
+     (JLabel.))
+  ([arg0]
+     (JLabel. arg0))
+  ([arg0 arg1]
+     (JLabel. arg0 arg1))
+  ([arg0 arg1 arg2]
+     (JLabel. arg0 arg1 arg2)))
