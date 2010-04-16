@@ -61,17 +61,6 @@
 			    :delete update-from-event!}
 			   context key #(textfield-value component))))
 
-(defn watch-textfield [component context key]
-  (add-document-listener (.getDocument component)
-			 {:changed update-from-event!
-			  :insert update-from-event!
-			  :delete update-from-event!}
-			 context key #(textfield-value component))
-  (update! context {key (textfield-value component)} true)
-  (let [observer (make-component-observer key textfield-value set-textfield component)]
-    (add-observer! context observer key))
-  component)
-
 (defn textfield
   ([context key]
      (watch-textfield (JTextField.) context key))
