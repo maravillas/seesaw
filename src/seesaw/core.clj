@@ -22,10 +22,10 @@
 
 ;;;;;;;;;;;;;;;;;;;; Components with watches ;;;;;;;;;;;;;;;;;;;;
 
-(defn- checkbox-selected? [checkbox]
+(defn checkbox-selected? [checkbox]
   (.. checkbox getModel isSelected))
 
-(defn- select-checkbox [checkbox selected]
+(defn select-checkbox [checkbox selected]
   (.setSelected checkbox selected))
 
 (defwatch watch-checkbox
@@ -45,10 +45,10 @@
   ([context key arg0 arg1 arg2]
      (watch-checkbox (JCheckBox. arg0 arg1 arg2) context key)))
 
-(defn- textfield-value [textfield]
+(defn textfield-value [textfield]
   (.getText textfield))
 
-(defn- set-textfield [textfield text]
+(defn set-textfield [textfield text]
   (.setText textfield text))
 
 (defwatch watch-textfield
@@ -70,6 +70,8 @@
      (watch-textfield (JTextField. arg0 arg1) context key))
   ([context key arg0 arg1 arg2]
      (watch-textfield (JTextField. arg0 arg1 arg2) context key)))
+
+
 
 ;;;;;;;;;;;;;;;;;;;; Components with no watches ;;;;;;;;;;;;;;;;;;;;
 
