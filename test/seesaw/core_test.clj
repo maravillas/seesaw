@@ -22,25 +22,25 @@
     (await agent)
     (is (.. checkbox getModel isSelected))))
 
-(deftest textfield-initializes-context
+(deftest text-field-initializes-context
   (let [context (make-context)
-	textfield (textfield context :text)]
+	text-field (text-field context :text)]
     (is (contains? @context :text))
     (is (= (:text @context)
 	   ""))))
 
-(deftest textfield-changes-update-context
+(deftest text-field-changes-update-context
   (let [context (make-context)
-	textfield (textfield context :text)]
-    (.setText textfield "Lorem Ipsum")
+	text-field (text-field context :text)]
+    (.setText text-field "Lorem Ipsum")
     (is (= (:text @context)
 	   "Lorem Ipsum"))))
 
-(deftest textfield-mirrors-context
+(deftest text-field-mirrors-context
   (let [context (make-context)
-	textfield (textfield context :text)
+	text-field (text-field context :text)
 	agent (agent nil)]
     (update! context {:text "Lorem Ipsum"} false agent)
     (await agent)
-    (is (= (.getText textfield)
+    (is (= (.getText text-field)
 	   "Lorem Ipsum"))))

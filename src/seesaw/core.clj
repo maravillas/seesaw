@@ -45,31 +45,31 @@
   ([context key arg0 arg1 arg2]
      (watch-checkbox (JCheckBox. arg0 arg1 arg2) context key)))
 
-(defn textfield-value [textfield]
-  (.getText textfield))
+(defn text-field-value [text-field]
+  (.getText text-field))
 
-(defn set-textfield [textfield text]
-  (.setText textfield text))
+(defn set-text-field [text-field text]
+  (.setText text-field text))
 
-(defwatch watch-textfield
-  textfield-value
-  set-textfield
+(defwatch watch-text-field
+  text-field-value
+  set-text-field
   (fn [component context key]
     (add-document-listener (.getDocument component)
 			   {:changed update-from-event!
 			    :insert update-from-event!
 			    :delete update-from-event!}
-			   context key #(textfield-value component))))
+			   context key #(text-field-value component))))
 
-(defn textfield
+(defn text-field
   ([context key]
-     (watch-textfield (JTextField.) context key))
+     (watch-text-field (JTextField.) context key))
   ([context key arg0]
-     (watch-textfield (JTextField. arg0) context key))
+     (watch-text-field (JTextField. arg0) context key))
   ([context key arg0 arg1]
-     (watch-textfield (JTextField. arg0 arg1) context key))
+     (watch-text-field (JTextField. arg0 arg1) context key))
   ([context key arg0 arg1 arg2]
-     (watch-textfield (JTextField. arg0 arg1 arg2) context key)))
+     (watch-text-field (JTextField. arg0 arg1 arg2) context key)))
 
 
 

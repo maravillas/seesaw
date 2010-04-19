@@ -22,8 +22,8 @@
   (javax.swing.UIManager/setLookAndFeel (javax.swing.UIManager/getSystemLookAndFeelClassName))
   (let [context (make-context)
 	frame (frame "Seesaw Sample")
-	celsius (textfield context :celsius 5)
-	fahrenheit (textfield context :fahrenheit 5)
+	celsius (text-field context :celsius 5)
+	fahrenheit (text-field context :fahrenheit 5)
 	celsius-label (label "Celsius:")
 	fahrenheit-label (label "Fahrenheit:")]
     (add-updater! context (fn [old new]
