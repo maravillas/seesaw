@@ -1,5 +1,5 @@
 (ns seesaw.core
-  (:use [seesaw listeners spectator util])
+  (:use [seesaw listeners spectator util component-utils])
   (:use [clojure.contrib swing-utils logging])
   (:import [javax.swing JCheckBox JTextField JFrame JLabel JRadioButton ButtonGroup]))
 
@@ -25,12 +25,6 @@
 
 ;;;;;;;;;;;;;;;;;;;; Components with watches ;;;;;;;;;;;;;;;;;;;;
 
-(defn checkbox-selected? [checkbox]
-  (.. checkbox getModel isSelected))
-
-(defn select-checkbox [checkbox selected]
-  (.setSelected checkbox selected))
-
 (defwatch watch-checkbox
   checkbox-selected?
   select-checkbox
@@ -47,12 +41,6 @@
      (watch-checkbox (JCheckBox. arg0 arg1) context key))
   ([context key arg0 arg1 arg2]
      (watch-checkbox (JCheckBox. arg0 arg1 arg2) context key)))
-
-(defn text-field-value [text-field]
-  (.getText text-field))
-
-(defn set-text-field [text-field text]
-  (.setText text-field text))
 
 (defwatch watch-text-field
   text-field-value
@@ -74,41 +62,9 @@
   ([context key arg0 arg1 arg2]
      (watch-text-field (JTextField. arg0 arg1 arg2) context key)))
 
-(defn radio-button-selected? [radio-button]
-  (.isSelected radio-button))
-
-(defn select-radio-button [radio-button selected]
-  (.setSelected radio-button selected))
-
-(defn- add-to-group [button button-group]
-  (.add button-group button)
-  button)
-
-(defn- set-action-command [button command]
-  (.setActionCommand button command)
-  button)
-
 (defn radio-button
   ([key]
      (set-action-command (JRadioButton.) (keyword-str key))))
-
-(defn button-group-buttons [button-group]
-  (enumeration-seq (.getElements button-group)))
-
-(defn button-in-group [button-group key]
-  (some #(and (= (.getActionCommand %1) key) %1) (button-group-buttons button-group)))
-
-(defn button-group-value [button-group]
-  (apply hash-map (mapcat (fn [button] [(keyword (.getActionCommand button))
-					(radio-button-selected? button)])
-			  (enumeration-seq (.getElements button-group)))))
-
-(defn set-button-group [button-group new-value]
-  (doseq [key (keys new-value)]
-    (let [button (button-in-group button-group key)
-	  model (.getModel button)
-	  value (key new-value)]
-      (.setSelected button-group model value))))
 
 (defwatch watch-button-group
   button-group-value
