@@ -12,13 +12,16 @@
   [_ context key value-fn]
   (update! context {key (value-fn)}))
 
-(defmacro defwatch [name get-state set-state add-listener]
-  `(defn ~name [component# context# key#]
-     (apply ~add-listener [component# context# key#])
-     (update! context# {key# (~get-state component#)} true)
-     (let [observer# (make-component-observer key# ~get-state ~set-state component#)]
-       (add-observer! context# observer# key#))
-     component#))
+(defmacro defwatch
+  ([name get-state set-state]
+     `(defwatch ~name ~get-state ~set-state (fn [& _#])))
+  ([name get-state set-state add-listener]
+      `(defn ~name [component# context# key#]
+	 (apply ~add-listener [component# context# key#])
+	 (update! context# {key# (~get-state component#)} true)
+	 (let [observer# (make-component-observer key# ~get-state ~set-state component#)]
+	   (add-observer! context# observer# key#))
+	 component#)))
 
 ;;;;;;;;;;;;;;;;;;;; Components with watches ;;;;;;;;;;;;;;;;;;;;
 
@@ -109,10 +112,7 @@
 
 (defwatch watch-button-group
   button-group-value
-  set-button-group
-  (fn [component context key]
-    
-    ))
+  set-button-group)
 
 (defn button-group
   ([context key & buttons]
