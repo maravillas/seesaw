@@ -1,4 +1,4 @@
-(ns seesaw.util)
+(ns seesaw.utils)
 
 ;; see clojure.contrib.string/as-str in 1.2
 

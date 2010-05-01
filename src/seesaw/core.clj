@@ -1,5 +1,5 @@
 (ns seesaw.core
-  (:use [seesaw listeners spectator watch component-utils util])
+  (:use [seesaw listeners spectator watch component-utils utils])
   (:import [javax.swing JCheckBox JTextField JFrame JLabel JRadioButton ButtonGroup]))
 
 ;;;;;;;;;;;;;;;;;;;; Components with watches ;;;;;;;;;;;;;;;;;;;;
