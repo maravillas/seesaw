@@ -1,5 +1,5 @@
 (ns seesaw.core-test
-  (:use [seesaw core spectator] :reload-all)
+  (:use [seesaw core spectator component-utils] :reload-all)
   (:use [clojure.test]))
 
 (deftest checkbox-initializes-context
