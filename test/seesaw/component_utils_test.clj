@@ -86,11 +86,11 @@
 	b2 (JRadioButton.)
 	group (ButtonGroup.)]
     (init-radio-button-group b1 b2 group)
-    (is (= (find-button group "b1")
+    (is (= (find-button group :b1)
 	   b1))
-    (is (= (find-button group "b2")
+    (is (= (find-button group :b2)
 	   b2))
-    (is (nil? (find-button group "b3")))))
+    (is (nil? (find-button group :b3)))))
 
 (deftest button-group-value-collects-radio-button-values
   (let [b1 (JRadioButton.)

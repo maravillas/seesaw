@@ -1,4 +1,5 @@
-(ns seesaw.component-utils)
+(ns seesaw.component-utils
+  (:use [seesaw utils]))
 
 (defn checkbox-selected? [checkbox]
   (.isSelected checkbox))
@@ -32,9 +33,10 @@
 (defn button-group-buttons [button-group]
   (enumeration-seq (.getElements button-group)))
 
-(defn find-button [button-group action-command]
-  (some #(and (= (.getActionCommand %1) action-command) %1)
-	(button-group-buttons button-group)))
+(defn find-button [button-group key]
+  (let [action-command (keyword-str key)]
+    (some #(and (= (.getActionCommand %1) action-command) %1)
+	  (button-group-buttons button-group))))
 
 (defn button-group-value [value-fn group]
   (apply hash-map (mapcat (fn [button] [(keyword (.getActionCommand button))
