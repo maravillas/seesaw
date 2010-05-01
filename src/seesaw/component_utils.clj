@@ -1,7 +1,7 @@
 (ns seesaw.component-utils)
 
 (defn checkbox-selected? [checkbox]
-  (.. checkbox getModel isSelected))
+  (.isSelected checkbox))
 
 (defn select-checkbox [checkbox selected]
   (.setSelected checkbox selected))
@@ -32,8 +32,9 @@
 (defn button-group-buttons [button-group]
   (enumeration-seq (.getElements button-group)))
 
-(defn button-in-group [button-group key]
-  (some #(and (= (.getActionCommand %1) key) %1) (button-group-buttons button-group)))
+(defn find-button [button-group action-command]
+  (some #(and (= (.getActionCommand %1) action-command) %1)
+	(button-group-buttons button-group)))
 
 (defn button-group-value [button-group]
   (apply hash-map (mapcat (fn [button] [(keyword (.getActionCommand button))
@@ -42,7 +43,7 @@
 
 (defn set-button-group [button-group new-value]
   (doseq [key (keys new-value)]
-    (let [button (button-in-group button-group key)
+    (let [button (find-button button-group key)
 	  model (.getModel button)
 	  value (key new-value)]
       (.setSelected button-group model value))))
