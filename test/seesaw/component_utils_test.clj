@@ -102,3 +102,15 @@
     (.setSelected b1 true)
     (is (= (button-group-value radio-button-selected? group)
 	   {:b1 true :b2 false}))))
+
+(deftest set-button-group-sets-radio-button-value
+  (let [b1 (JRadioButton.)
+	b2 (JRadioButton.)
+	group (ButtonGroup.)]
+    (init-radio-button-group b1 b2 group)
+    (set-button-group group {:b2 true})
+    (is (= (button-group-value radio-button-selected? group)
+	   {:b1 false :b2 true}))
+    (set-button-group group {:b1 true :b2 false})
+    (is (= (button-group-value radio-button-selected? group)
+	   {:b1 true :b2 false}))))
