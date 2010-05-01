@@ -44,3 +44,34 @@
     (await agent)
     (is (= (.getText text-field)
 	   "Lorem Ipsum"))))
+
+(deftest radio-button-group-initializes-context
+  (let [context (make-context)
+	button1 (radio-button :a)
+	button2 (radio-button :b)
+	button3 (radio-button :c)
+	group (button-group context :group button1 button2 button3)]
+    (is (= (:group @context)
+	   {:a false :b false :c false}))))
+
+(deftest radio-button-changes-update-context
+  (let [context (make-context)
+	button1 (radio-button :a)
+	button2 (radio-button :b)
+	button3 (radio-button :c)
+	group (button-group context :group button1 button2 button3)]
+    (.setSelected button1 true)
+    (is (= (:group @context)
+	   {:a true :b false :c false}))))
+
+(deftest radio-button-mirrors-context
+  (let [context (make-context)
+	button1 (radio-button :a)
+	button2 (radio-button :b)
+	button3 (radio-button :c)
+	group (button-group context :group button1 button2 button3)
+	agent (agent nil)]
+    (update! context {:group {:a false :b true :c false}} false agent)
+    (await agent)
+    (is (= (:group @context)
+	   {:a false :b true :c false}))))

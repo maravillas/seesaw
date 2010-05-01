@@ -1,7 +1,7 @@
 (ns seesaw.core
-  (:use [seesaw listeners spectator])
+  (:use [seesaw listeners spectator util])
   (:use [clojure.contrib swing-utils logging])
-  (:import [javax.swing JCheckBox JTextField JFrame JLabel]))
+  (:import [javax.swing JCheckBox JTextField JFrame JLabel JRadioButton ButtonGroup]))
 
 (defn make-component-observer [key get-state set-state component]
   (fn [old new]
@@ -71,7 +71,62 @@
   ([context key arg0 arg1 arg2]
      (watch-text-field (JTextField. arg0 arg1 arg2) context key)))
 
+(defn radio-button-selected? [radio-button]
+  (.isSelected radio-button))
 
+(defn select-radio-button [radio-button selected]
+  (.setSelected radio-button selected))
+
+(defn- add-to-group [button button-group]
+  (.add button-group button)
+  button)
+
+(defn- set-action-command [button command]
+  (.setActionCommand button command)
+  button)
+
+(defn radio-button
+  ([key]
+     (set-action-command (JRadioButton.) (keyword-str key))))
+
+(defn button-group-buttons [button-group]
+  (enumeration-seq (.getElements button-group)))
+
+(defn button-in-group [button-group key]
+  (some #(and (= (.getActionCommand %1) key) %1) (button-group-buttons button-group)))
+
+(defn button-group-value [button-group]
+  (apply hash-map (mapcat (fn [button] [(keyword (.getActionCommand button))
+					(radio-button-selected? button)])
+			  (enumeration-seq (.getElements button-group)))))
+
+(defn set-button-group [button-group new-value]
+  (doseq [key (keys new-value)]
+    (let [button (button-in-group button-group key)
+	  model (.getModel button)
+	  value (key new-value)]
+      (.setSelected button-group model value))))
+
+(defwatch watch-button-group
+  button-group-value
+  set-button-group
+  (fn [component context key]
+    
+    ))
+
+(defn button-group
+  ([context key & buttons]
+     (let [group (ButtonGroup.)]
+       (doseq [button buttons]
+	 (.add group button)
+	 (add-change-listener
+	  button
+	  (fn [evt]
+	    (let [button-value {(keyword (.getActionCommand button))
+				(radio-button-selected? button)}
+		  group-value (merge (key @context) button-value)]
+	      (update! context {key group-value})))))
+       (watch-button-group group context key))))
 
 ;;;;;;;;;;;;;;;;;;;; Components with no watches ;;;;;;;;;;;;;;;;;;;;
 

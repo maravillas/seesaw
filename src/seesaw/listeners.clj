@@ -4,7 +4,7 @@
 (defn- nop [& args])
 
 (defn add-change-listener [component f & args]
-  "Adds a ChangeLister to component. When the event fires, f will be 
+  "Adds a ChangeListener to component. When the event fires, f will be 
 invoked with the event as its first argument followed by args.
 Returns the listener."
   (let [listener (proxy [ChangeListener] []
@@ -13,7 +13,7 @@ Returns the listener."
     listener))
 
 (defn add-document-listener [component {:keys [changed insert remove]} & args]
-  "Adds a DocumentLister to component. When an event fires, the 
+  "Adds a DocumentListener to component. When an event fires, the 
 corresponding function will be invoked with the event as its first 
 argument followed by args. Returns the listener."
   (let [changed-fn (or changed nop)
