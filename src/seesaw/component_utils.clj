@@ -36,10 +36,10 @@
   (some #(and (= (.getActionCommand %1) action-command) %1)
 	(button-group-buttons button-group)))
 
-(defn button-group-value [button-group]
+(defn button-group-value [value-fn group]
   (apply hash-map (mapcat (fn [button] [(keyword (.getActionCommand button))
-					(radio-button-selected? button)])
-			  (enumeration-seq (.getElements button-group)))))
+					(value-fn button)])
+			  (enumeration-seq (.getElements group)))))
 
 (defn set-button-group [button-group new-value]
   (doseq [key (keys new-value)]

@@ -29,7 +29,7 @@
      (set-action-command (JRadioButton.) (keyword-str key))))
 
 (defn button-group
-  ([context key & buttons]
+  ([context key value-fn & buttons]
      (let [group (ButtonGroup.)]
        (doseq [button buttons]
 	 (.add group button)
@@ -37,10 +37,10 @@
 	  button
 	  (fn [evt]
 	    (let [button-value {(keyword (.getActionCommand button))
-				(radio-button-selected? button)}
+				(value-fn button)}
 		  group-value (merge (key @context) button-value)]
 	      (update! context {key group-value})))))
-       (watch-button-group group context key))))
+       (watch-button-group group context key value-fn))))
 
 ;;;;;;;;;;;;;;;;;;;; Components with no watches ;;;;;;;;;;;;;;;;;;;;
 

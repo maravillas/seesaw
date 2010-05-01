@@ -60,13 +60,19 @@
     (is (= (.getActionCommand button)
 	   "Action!"))))
 
+(defn- init-radio-button-group
+  [b1 b2 group]
+    (.setActionCommand b1 "b1")
+    (.setActionCommand b2 "b2")
+    (doto group
+      (.add b1)
+      (.add b2)))
+
 (deftest button-group-buttons-gets-buttons
   (let [b1 (JRadioButton.)
 	b2 (JRadioButton.)
 	group (ButtonGroup.)]
-    (doto group
-      (.add b1)
-      (.add b2))
+    (init-radio-button-group b1 b2 group)
     (let [buttons (button-group-buttons group)]
       (is (some #(= %1 b1) buttons))
       (is (some #(= %1 b2) buttons)))))
@@ -79,14 +85,20 @@
   (let [b1 (JRadioButton.)
 	b2 (JRadioButton.)
 	group (ButtonGroup.)]
-    (.setActionCommand b1 "b1")
-    (.setActionCommand b2 "b2")
-    (doto group
-      (.add b1)
-      (.add b2))
+    (init-radio-button-group b1 b2 group)
     (is (= (find-button group "b1")
 	   b1))
     (is (= (find-button group "b2")
 	   b2))
     (is (nil? (find-button group "b3")))))
 
+(deftest button-group-value-collects-radio-button-values
+  (let [b1 (JRadioButton.)
+	b2 (JRadioButton.)
+	group (ButtonGroup.)]
+    (init-radio-button-group b1 b2 group)
+    (is (= (button-group-value radio-button-selected? group)
+	   {:b1 false :b2 false}))
+    (.setSelected b1 true)
+    (is (= (button-group-value radio-button-selected? group)
+	   {:b1 true :b2 false}))))
