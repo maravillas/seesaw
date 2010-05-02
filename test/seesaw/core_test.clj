@@ -111,3 +111,9 @@
 	   "text"))
     (is (= (.getToolTipText label)
 	   "tool tip!"))))
+
+(deftest button-options-are-set
+  (let [button (button :text "text" :enabled false)]
+    (is (= (.getText button)
+	   "text"))
+    (is (not (.isEnabled button)))))

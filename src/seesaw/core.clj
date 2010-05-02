@@ -1,6 +1,6 @@
 (ns seesaw.core
   (:use [seesaw listeners spectator watch component-utils utils])
-  (:import [javax.swing JCheckBox JTextField JFrame JLabel JRadioButton ButtonGroup]))
+  (:import [javax.swing JCheckBox JTextField JFrame JLabel JRadioButton ButtonGroup JButton]))
 
 (defn- set-properties
   [component properties-values]
@@ -56,4 +56,9 @@
 (defn label
   ([& options]
      (-> (JLabel.)
+	 (set-properties options))))
+
+(defn button
+  ([& options]
+     (-> (JButton.)
 	 (set-properties options))))
