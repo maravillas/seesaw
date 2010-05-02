@@ -2,31 +2,32 @@
   (:use [seesaw listeners spectator watch component-utils utils])
   (:import [javax.swing JCheckBox JTextField JFrame JLabel JRadioButton ButtonGroup]))
 
+(defn- set-properties
+  [component properties-values]
+  (doseq [[prop val] (partition 2 properties-values)]
+    (let [val (if (coll? val) val [val])]
+      (apply str-invoke (keyword-to-setter prop) component val)))
+  component)
+
 ;;;;;;;;;;;;;;;;;;;; Components with watches ;;;;;;;;;;;;;;;;;;;;
 
 (defn checkbox 
-  ([context key]
-     (watch-checkbox (JCheckBox.) context key))
-  ([context key arg0]
-     (watch-checkbox (JCheckBox. arg0) context key))
-  ([context key arg0 arg1]
-     (watch-checkbox (JCheckBox. arg0 arg1) context key))
-  ([context key arg0 arg1 arg2]
-     (watch-checkbox (JCheckBox. arg0 arg1 arg2) context key)))
+  ([context key & options]
+     (-> (JCheckBox.)
+	 (watch-checkbox context key)
+	 (set-properties options))))
 
 (defn text-field
-  ([context key]
-     (watch-text-field (JTextField.) context key))
-  ([context key arg0]
-     (watch-text-field (JTextField. arg0) context key))
-  ([context key arg0 arg1]
-     (watch-text-field (JTextField. arg0 arg1) context key))
-  ([context key arg0 arg1 arg2]
-     (watch-text-field (JTextField. arg0 arg1 arg2) context key)))
+  ([context key & options]
+     (-> (JTextField.)
+	 (watch-text-field context key)
+	 (set-properties options))))
 
 (defn radio-button
-  ([key]
-     (set-action-command (JRadioButton.) (keyword-str key))))
+  ([key & options]
+     (-> (JRadioButton.)
+	 (set-properties options)
+	 (set-action-command (keyword-str key)))))
 
 (defn button-group
   ([context key value-fn & buttons]
@@ -44,19 +45,11 @@
 ;;;;;;;;;;;;;;;;;;;; Components with no watches ;;;;;;;;;;;;;;;;;;;;
 
 (defn frame
-  ([]
-     (JFrame.))
-  ([arg0]
-     (JFrame. arg0))
-  ([arg0 arg1]
-     (JFrame. arg0 arg1)))
+  ([& options]
+     (-> (JFrame.)
+	 (set-properties options))))
 
 (defn label
-  ([]
-     (JLabel.))
-  ([arg0]
-     (JLabel. arg0))
-  ([arg0 arg1]
-     (JLabel. arg0 arg1))
-  ([arg0 arg1 arg2]
-     (JLabel. arg0 arg1 arg2)))
+  ([& options]
+     (-> (JLabel.)
+	 (set-properties options))))

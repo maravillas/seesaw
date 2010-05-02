@@ -4,13 +4,13 @@
 
 (deftest checkbox-initializes-context
   (let [context (make-context)
-	checkbox (checkbox context :checkbox)]
+	checkbox (checkbox context :checkbox :selected false)]
     (is (contains? @context :checkbox))
     (is (not (:checkbox @context)))))
 
 (deftest checkbox-changes-update-context
   (let [context (make-context)
-	checkbox (checkbox context :checkbox)]
+	checkbox (checkbox context :checkbox :selected false)]
     (.setSelected checkbox true)
     (is (:checkbox @context))))
 
@@ -22,12 +22,19 @@
     (await agent)
     (is (.. checkbox getModel isSelected))))
 
+(deftest checkbox-options-are-set
+  (let [context (make-context)
+	checkbox (checkbox context :checkbox :selected true :text "text")]
+    (is (.isSelected checkbox))
+    (is (= (.getText checkbox)
+	   "text"))))
+
 (deftest text-field-initializes-context
   (let [context (make-context)
-	text-field (text-field context :text)]
+	text-field (text-field context :text :text "text")]
     (is (contains? @context :text))
     (is (= (:text @context)
-	   ""))))
+	   "text"))))
 
 (deftest text-field-changes-update-context
   (let [context (make-context)
@@ -45,14 +52,21 @@
     (is (= (.getText text-field)
 	   "Lorem Ipsum"))))
 
+(deftest text-field-options-are-set
+  (let [context (make-context)
+	text-field (text-field context :text :text "text" :enabled false)]
+    (is (= (.getText text-field)
+	   "text"))
+    (is (not (.isEnabled text-field)))))
+
 (deftest radio-button-group-initializes-context
   (let [context (make-context)
-	button1 (radio-button :a)
+	button1 (radio-button :a :selected true)
 	button2 (radio-button :b)
 	button3 (radio-button :c)
 	group (button-group context :group radio-button-selected? button1 button2 button3)]
     (is (= (:group @context)
-	   {:a false :b false :c false}))))
+	   {:a true :b false :c false}))))
 
 (deftest radio-button-changes-update-context
   (let [context (make-context)
@@ -75,3 +89,25 @@
     (await agent)
     (is (= (:group @context)
 	   {:a false :b true :c false}))))
+
+(deftest radio-button-options-are-set
+  (let [context (make-context)
+	button (radio-button :a :mnemonic 97 :text "text")]
+    (is (= (.getMnemonic button)
+	   97))
+    (is (= (.getText button)
+	   "text"))))
+
+
+(deftest frame-options-are-set
+  (let [frame (frame :size [2 4] :visible false)]
+    (is (= (.getSize frame)
+	   (java.awt.Dimension. 2 4)))
+    (is (not (.isVisible frame)))))
+
+(deftest label-options-are-set
+  (let [label (label :text "text" :tool-tip-text "tool tip!")]
+    (is (= (.getText label)
+	   "text"))
+    (is (= (.getToolTipText label)
+	   "tool tip!"))))
