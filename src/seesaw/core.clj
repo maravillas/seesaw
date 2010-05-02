@@ -42,6 +42,10 @@
 	      (update! context {key group-value})))))
        (watch-button-group group context key value-fn))))
 
+(defn radio-button-group
+  ([context key & buttons]
+     (apply button-group context key radio-button-selected? buttons)))
+
 ;;;;;;;;;;;;;;;;;;;; Components with no watches ;;;;;;;;;;;;;;;;;;;;
 
 (defn frame

@@ -64,7 +64,7 @@
 	button1 (radio-button :a :selected true)
 	button2 (radio-button :b)
 	button3 (radio-button :c)
-	group (button-group context :group radio-button-selected? button1 button2 button3)]
+	group (radio-button-group context :group button1 button2 button3)]
     (is (= (:group @context)
 	   {:a true :b false :c false}))))
 
@@ -73,7 +73,7 @@
 	button1 (radio-button :a)
 	button2 (radio-button :b)
 	button3 (radio-button :c)
-	group (button-group context :group radio-button-selected? button1 button2 button3)]
+	group (radio-button-group context :group button1 button2 button3)]
     (.setSelected button1 true)
     (is (= (:group @context)
 	   {:a true :b false :c false}))))
@@ -83,7 +83,7 @@
 	button1 (radio-button :a)
 	button2 (radio-button :b)
 	button3 (radio-button :c)
-	group (button-group context :group radio-button-selected? button1 button2 button3)
+	group (radio-button-group context :group button1 button2 button3)
 	agent (agent nil)]
     (update! context {:group {:a false :b true :c false}} false agent)
     (await agent)
