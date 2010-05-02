@@ -33,12 +33,11 @@
      (let [group (ButtonGroup.)]
        (doseq [button buttons]
 	 (.add group button)
-	 (add-change-listener
-	  button
-	  (fn [evt]
-	    (let [button-value {(keyword (.getActionCommand button))
-				(value-fn button)}
-		  group-value (merge (key @context) button-value)]
+	 (add-change-listener button
+			      (fn [evt]
+				(let [button-value {(keyword (.getActionCommand button))
+						    (value-fn button)}
+				      group-value (merge (key @context) button-value)]
 	      (update! context {key group-value})))))
        (watch-button-group group context key value-fn))))
 

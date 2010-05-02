@@ -12,7 +12,7 @@
 
 (defn- watch-component
   ([get-fn set-fn]
-     (watch-component get-fn set-fn (fn [& _#])))
+     (watch-component get-fn set-fn (fn [& _])))
   ([get-fn set-fn add-listeners-fn]
       (fn [component context key]
 	(add-listeners-fn component context key)
