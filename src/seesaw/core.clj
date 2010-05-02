@@ -6,28 +6,27 @@
   [component properties-values]
   (doseq [[prop val] (partition 2 properties-values)]
     (let [val (if (coll? val) val [val])]
-      (apply str-invoke (keyword-to-setter prop) component val)))
-  component)
+      (apply str-invoke (keyword-to-setter prop) component val))))
 
 ;;;;;;;;;;;;;;;;;;;; Components with watches ;;;;;;;;;;;;;;;;;;;;
 
 (defn checkbox 
   ([context key & options]
-     (-> (JCheckBox.)
-	 (watch-checkbox context key)
-	 (set-properties options))))
+     (doto (JCheckBox.)
+       (watch-checkbox context key)
+       (set-properties options))))
 
 (defn text-field
   ([context key & options]
-     (-> (JTextField.)
-	 (watch-text-field context key)
-	 (set-properties options))))
+     (doto (JTextField.)
+       (watch-text-field context key)
+       (set-properties options))))
 
 (defn radio-button
   ([key & options]
-     (-> (JRadioButton.)
-	 (set-properties options)
-	 (set-action-command (keyword-str key)))))
+     (doto (JRadioButton.)
+       (set-properties options)
+       (set-action-command (keyword-str key)))))
 
 (defn button-group
   ([context key value-fn & buttons]
@@ -50,15 +49,15 @@
 
 (defn frame
   ([& options]
-     (-> (JFrame.)
-	 (set-properties options))))
+     (doto (JFrame.)
+       (set-properties options))))
 
 (defn label
   ([& options]
-     (-> (JLabel.)
-	 (set-properties options))))
+     (doto (JLabel.)
+       (set-properties options))))
 
 (defn button
   ([& options]
-     (-> (JButton.)
-	 (set-properties options))))
+     (doto (JButton.)
+       (set-properties options))))

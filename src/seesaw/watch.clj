@@ -18,8 +18,7 @@
 	(add-listeners-fn component context key)
 	(update! context {key (get-fn component)} true)
 	(let [observer (make-component-observer key get-fn set-fn component)]
-	  (add-observer! context observer key))
-	component)))
+	  (add-observer! context observer key)))))
 
 (defn- add-checkbox-listeners
   [component context key]
