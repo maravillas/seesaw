@@ -3,7 +3,7 @@
   (:import [javax.swing JCheckBox JTextField JFrame JLabel JRadioButton
 	    ButtonGroup JButton JToggleButton]))
 
-(defn- set-properties
+(defn set-properties
   [component properties-values]
   (doseq [[prop val] (partition 2 properties-values)]
     (let [val (if (coll? val) val [val])]
