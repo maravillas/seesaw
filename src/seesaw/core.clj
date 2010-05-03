@@ -23,8 +23,9 @@
        (set-properties options))))
 
 (defn radio-button
-  ([key & options]
+  ([context key & options]
      (doto (JRadioButton.)
+       (watch-radio-button context key)
        (set-properties options)
        (set-action-command (keyword-str key)))))
 

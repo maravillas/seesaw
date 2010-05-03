@@ -20,7 +20,7 @@
 	agent (agent nil)]
     (update! context {:checkbox true} false agent)
     (await agent)
-    (is (.. checkbox getModel isSelected))))
+    (is (.. checkbox isSelected))))
 
 (deftest checkbox-options-are-set
   (let [context (make-context)
@@ -59,44 +59,64 @@
 	   "text"))
     (is (not (.isEnabled text-field)))))
 
+(deftest radio-button-initializes-context
+  (let [context (make-context)
+	button (radio-button context :button :selected false)]
+    (is (contains? @context :button))
+    (is (not (:button @context)))))
+
+(deftest radio-button-changes-update-context
+  (let [context (make-context)
+	button (radio-button context :button :selected false)]
+    (.setSelected button true)
+    (is (:button  @context))))
+
+(deftest radio-button-mirrors-context
+  (let [context (make-context)
+	button (radio-button context :button)
+	agent (agent nil)]
+    (update! context {:button true} false agent)
+    (await agent)
+    (is (.. button isSelected))))
+
+(deftest radio-button-options-are-set
+  (let [context (make-context)
+	button (radio-button context :a :mnemonic 97 :text "text")]
+    (is (= (.getMnemonic button)
+	   97))
+    (is (= (.getText button)
+	   "text"))))
+
 (deftest radio-button-group-initializes-context
   (let [context (make-context)
-	button1 (radio-button :a :selected true)
-	button2 (radio-button :b)
-	button3 (radio-button :c)
+	button1 (radio-button context :a :selected true)
+	button2 (radio-button context :b)
+	button3 (radio-button context :c)
 	group (radio-button-group context :group button1 button2 button3)]
     (is (= (:group @context)
 	   {:a true :b false :c false}))))
 
-(deftest radio-button-changes-update-context
+(deftest radio-button-group-changes-update-context
   (let [context (make-context)
-	button1 (radio-button :a)
-	button2 (radio-button :b)
-	button3 (radio-button :c)
+	button1 (radio-button context :a)
+	button2 (radio-button context :b)
+	button3 (radio-button context :c)
 	group (radio-button-group context :group button1 button2 button3)]
     (.setSelected button1 true)
     (is (= (:group @context)
 	   {:a true :b false :c false}))))
 
-(deftest radio-button-mirrors-context
+(deftest radio-button-group-mirrors-context
   (let [context (make-context)
-	button1 (radio-button :a)
-	button2 (radio-button :b)
-	button3 (radio-button :c)
+	button1 (radio-button context :a)
+	button2 (radio-button context :b)
+	button3 (radio-button context :c)
 	group (radio-button-group context :group button1 button2 button3)
 	agent (agent nil)]
     (update! context {:group {:a false :b true :c false}} false agent)
     (await agent)
     (is (= (:group @context)
 	   {:a false :b true :c false}))))
-
-(deftest radio-button-options-are-set
-  (let [context (make-context)
-	button (radio-button :a :mnemonic 97 :text "text")]
-    (is (= (.getMnemonic button)
-	   97))
-    (is (= (.getText button)
-	   "text"))))
 
 
 (deftest frame-options-are-set
