@@ -11,31 +11,24 @@
 
 ;;;;;;;;;;;;;;;;;;;; Components with watches ;;;;;;;;;;;;;;;;;;;;
 
+(defn- abstract-button
+  [button context key & options]
+  (doto button
+    (watch-button context key)
+    (set-properties options)
+    (set-action-command (keyword-str key))))
+
 (defn checkbox 
   [context key & options]
-  (doto (JCheckBox.)
-    (watch-checkbox context key)
-    (set-properties options)))
-
-(defn text-field
-  [context key & options]
-  (doto (JTextField.)
-    (watch-text-field context key)
-    (set-properties options)))
+  (apply abstract-button (JCheckBox.) context key options))
 
 (defn radio-button
   [context key & options]
-  (doto (JRadioButton.)
-    (watch-button context key)
-    (set-properties options)
-    (set-action-command (keyword-str key))))
+  (apply abstract-button (JRadioButton.) context key options))
 
 (defn toggle-button
   [context key & options]
-  (doto (JToggleButton.)
-    (watch-button context key)
-    (set-properties options)
-    (set-action-command (keyword-str key))))
+  (apply abstract-button (JToggleButton.) context key options))
 
 (defn button-group
   [context key & buttons]
@@ -50,6 +43,12 @@
 			       (update! context {key group-value})))))
     (watch-button-group group context key)))
 
+(defn text-field
+  [context key & options]
+  (doto (JTextField.)
+    (watch-text-field context key)
+    (set-properties options)))
+
 ;;;;;;;;;;;;;;;;;;;; Components with no watches ;;;;;;;;;;;;;;;;;;;;
 
 (defn frame
@@ -61,6 +60,8 @@
   [& options]
   (doto (JLabel.)
     (set-properties options)))
+
+;; Although JButtons derive from AbstractButtons, they have no state to track.
 
 (defn button
   [& options]
