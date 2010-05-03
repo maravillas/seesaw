@@ -1,6 +1,7 @@
 (ns seesaw.core
   (:use [seesaw listeners spectator watch component-utils utils])
-  (:import [javax.swing JCheckBox JTextField JFrame JLabel JRadioButton ButtonGroup JButton]))
+  (:import [javax.swing JCheckBox JTextField JFrame JLabel JRadioButton
+	    ButtonGroup JButton JToggleButton]))
 
 (defn- set-properties
   [component properties-values]
@@ -25,26 +26,29 @@
 (defn radio-button
   [context key & options]
   (doto (JRadioButton.)
-    (watch-radio-button context key)
+    (watch-button context key)
+    (set-properties options)
+    (set-action-command (keyword-str key))))
+
+(defn toggle-button
+  [context key & options]
+  (doto (JToggleButton.)
+    (watch-button context key)
     (set-properties options)
     (set-action-command (keyword-str key))))
 
 (defn button-group
-  [context key value-fn & buttons]
+  [context key & buttons]
   (let [group (ButtonGroup.)]
     (doseq [button buttons]
       (.add group button)
       (add-change-listener button
 			   (fn [evt]
 			     (let [button-value {(keyword (.getActionCommand button))
-						 (value-fn button)}
+						 (button-selected? button)}
 				   group-value (merge (key @context) button-value)]
 			       (update! context {key group-value})))))
-    (watch-button-group group context key value-fn)))
-
-(defn radio-button-group
-  [context key & buttons]
-  (apply button-group context key radio-button-selected? buttons))
+    (watch-button-group group context key)))
 
 ;;;;;;;;;;;;;;;;;;;; Components with no watches ;;;;;;;;;;;;;;;;;;;;
 

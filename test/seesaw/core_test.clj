@@ -87,31 +87,31 @@
     (is (= (.getText button)
 	   "text"))))
 
-(deftest radio-button-group-initializes-context
+(deftest button-group-initializes-context
   (let [context (make-context)
 	button1 (radio-button context :a :selected true)
 	button2 (radio-button context :b)
 	button3 (radio-button context :c)
-	group (radio-button-group context :group button1 button2 button3)]
+	group (button-group context :group button1 button2 button3)]
     (is (= (:group @context)
 	   {:a true :b false :c false}))))
 
-(deftest radio-button-group-changes-update-context
+(deftest button-group-changes-update-context
   (let [context (make-context)
 	button1 (radio-button context :a)
 	button2 (radio-button context :b)
 	button3 (radio-button context :c)
-	group (radio-button-group context :group button1 button2 button3)]
+	group (button-group context :group button1 button2 button3)]
     (.setSelected button1 true)
     (is (= (:group @context)
 	   {:a true :b false :c false}))))
 
-(deftest radio-button-group-mirrors-context
+(deftest button-group-mirrors-context
   (let [context (make-context)
 	button1 (radio-button context :a)
 	button2 (radio-button context :b)
 	button3 (radio-button context :c)
-	group (radio-button-group context :group button1 button2 button3)
+	group (button-group context :group button1 button2 button3)
 	agent (agent nil)]
     (update! context {:group {:a false :b true :c false}} false agent)
     (await agent)

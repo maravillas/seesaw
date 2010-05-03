@@ -15,11 +15,11 @@
   (.setText text-field text))
 
 
-(defn radio-button-selected? [radio-button]
-  (.isSelected radio-button))
+(defn button-selected? [button]
+  (.isSelected button))
 
-(defn select-radio-button [radio-button selected]
-  (.setSelected radio-button selected))
+(defn select-button [button selected]
+  (.setSelected button selected))
 
 (defn add-to-group [button button-group]
   (.add button-group button)
@@ -38,9 +38,9 @@
     (some #(and (= (.getActionCommand %1) action-command) %1)
 	  (button-group-buttons button-group))))
 
-(defn button-group-value [value-fn group]
+(defn button-group-value [group]
   (apply hash-map (mapcat (fn [button] [(keyword (.getActionCommand button))
-					(value-fn button)])
+					(button-selected? button)])
 			  (enumeration-seq (.getElements group)))))
 
 (defn set-button-group [button-group new-value]

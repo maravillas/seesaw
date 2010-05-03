@@ -47,21 +47,20 @@
 			       add-text-field-listeners)]
     (watch component context key)))
 
-(defn- add-radio-button-listeners
+(defn- add-button-listeners
   [component context key]
   (add-change-listener component update-from-event!
-		       context key #(radio-button-selected? component)))
+		       context key #(button-selected? component)))
 
-(defn watch-radio-button
+(defn watch-button
   [component context key]
-  (let [watch (watch-component radio-button-selected?
-			       select-radio-button
-			       add-radio-button-listeners)]
+  (let [watch (watch-component button-selected?
+			       select-button
+			       add-button-listeners)]
     (watch component context key)))
 
 (defn watch-button-group
-  [component context key value-fn]
-  (let [watch (watch-component
-	       (partial button-group-value value-fn)
-	       set-button-group)]
+  [component context key]
+  (let [watch (watch-component button-group-value
+			       set-button-group)]
     (watch component context key)))

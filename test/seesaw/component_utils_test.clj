@@ -31,20 +31,20 @@
     (is (= (.getText text-field)
 	   "...dolor sit amet"))))
 
-(deftest radio-button-selected?-is-correct
+(deftest button-selected?-is-correct
   (let [button (JRadioButton.)]
     (.setSelected button false)
-    (is (not (radio-button-selected? button)))
+    (is (not (button-selected? button)))
 
     (.setSelected button true)
-    (is (radio-button-selected? button))))
+    (is (button-selected? button))))
 
-(deftest select-radio-button-selects
+(deftest select-button-selects
   (let [button (JRadioButton.)]
-    (select-radio-button button true)
+    (select-button button true)
     (is (.isSelected button))
 
-    (select-radio-button button false)
+    (select-button button false)
     (is (not (.isSelected button)))))
 
 (deftest add-to-group-adds
@@ -97,10 +97,10 @@
 	b2 (JRadioButton.)
 	group (ButtonGroup.)]
     (init-radio-button-group b1 b2 group)
-    (is (= (button-group-value radio-button-selected? group)
+    (is (= (button-group-value group)
 	   {:b1 false :b2 false}))
     (.setSelected b1 true)
-    (is (= (button-group-value radio-button-selected? group)
+    (is (= (button-group-value group)
 	   {:b1 true :b2 false}))))
 
 (deftest set-button-group-sets-radio-button-value
@@ -109,8 +109,8 @@
 	group (ButtonGroup.)]
     (init-radio-button-group b1 b2 group)
     (set-button-group group {:b2 true})
-    (is (= (button-group-value radio-button-selected? group)
+    (is (= (button-group-value group)
 	   {:b1 false :b2 true}))
     (set-button-group group {:b1 true :b2 false})
-    (is (= (button-group-value radio-button-selected? group)
+    (is (= (button-group-value group)
 	   {:b1 true :b2 false}))))
