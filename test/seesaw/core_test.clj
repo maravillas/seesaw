@@ -2,90 +2,72 @@
   (:use [seesaw core spectator component-utils] :reload-all)
   (:use [clojure.test]))
 
-(deftest checkbox-initializes-context
+(defn abstract-button-initializes-context
+  [button-fn]
   (let [context (make-context)
-	checkbox (checkbox context :checkbox :selected false)]
-    (is (contains? @context :checkbox))
-    (is (not (:checkbox @context)))))
-
-(deftest checkbox-changes-update-context
-  (let [context (make-context)
-	checkbox (checkbox context :checkbox :selected false)]
-    (.setSelected checkbox true)
-    (is (:checkbox @context))))
-
-(deftest checkbox-mirrors-context
-  (let [context (make-context)
-	checkbox (checkbox context :checkbox)
-	agent (agent nil)]
-    (update! context {:checkbox true} false agent)
-    (await agent)
-    (is (.. checkbox isSelected))))
-
-(deftest checkbox-options-are-set
-  (let [context (make-context)
-	checkbox (checkbox context :checkbox :selected true :text "text")]
-    (is (.isSelected checkbox))
-    (is (= (.getText checkbox)
-	   "text"))))
-
-(deftest text-field-initializes-context
-  (let [context (make-context)
-	text-field (text-field context :text :text "text")]
-    (is (contains? @context :text))
-    (is (= (:text @context)
-	   "text"))))
-
-(deftest text-field-changes-update-context
-  (let [context (make-context)
-	text-field (text-field context :text)]
-    (.setText text-field "Lorem Ipsum")
-    (is (= (:text @context)
-	   "Lorem Ipsum"))))
-
-(deftest text-field-mirrors-context
-  (let [context (make-context)
-	text-field (text-field context :text)
-	agent (agent nil)]
-    (update! context {:text "Lorem Ipsum"} false agent)
-    (await agent)
-    (is (= (.getText text-field)
-	   "Lorem Ipsum"))))
-
-(deftest text-field-options-are-set
-  (let [context (make-context)
-	text-field (text-field context :text :text "text" :enabled false)]
-    (is (= (.getText text-field)
-	   "text"))
-    (is (not (.isEnabled text-field)))))
-
-(deftest radio-button-initializes-context
-  (let [context (make-context)
-	button (radio-button context :button :selected false)]
+	button (button-fn context :button :selected false)]
     (is (contains? @context :button))
     (is (not (:button @context)))))
 
-(deftest radio-button-changes-update-context
-  (let [context (make-context)
-	button (radio-button context :button :selected false)]
-    (.setSelected button true)
-    (is (:button  @context))))
+(deftest checkbox-initializes-context
+  (abstract-button-initializes-context checkbox))
 
-(deftest radio-button-mirrors-context
+(deftest radio-button-initializes-context
+  (abstract-button-initializes-context radio-button))
+
+(deftest toggle-button-initializes-context
+  (abstract-button-initializes-context toggle-button))
+
+(defn abstract-button-changes-update-context
+  [button-fn]
   (let [context (make-context)
-	button (radio-button context :button)
+	button (button-fn context :button :selected false)]
+    (.setSelected button true)
+    (is (:button @context))))
+
+(deftest checkbox-changes-update-context
+  (abstract-button-changes-update-context checkbox))
+
+(deftest radio-button-changes-update-context
+  (abstract-button-changes-update-context radio-button))
+
+(deftest toggle-button-changes-update-context
+  (abstract-button-changes-update-context toggle-button))
+
+(defn abstract-button-mirrors-context
+  [button-fn]
+  (let [context (make-context)
+	button (button-fn context :button)
 	agent (agent nil)]
     (update! context {:button true} false agent)
     (await agent)
     (is (.. button isSelected))))
 
-(deftest radio-button-options-are-set
+(deftest checkbox-mirrors-context
+  (abstract-button-mirrors-context checkbox))
+
+(deftest radio-button-mirrors-context
+  (abstract-button-mirrors-context radio-button))
+
+(deftest toggle-button-mirrors-context
+  (abstract-button-mirrors-context toggle-button))
+
+(defn abstract-button-options-are-set
+  [button-fn]
   (let [context (make-context)
-	button (radio-button context :a :mnemonic 97 :text "text")]
-    (is (= (.getMnemonic button)
-	   97))
+	button (button-fn context :button :selected true :text "text")]
+    (is (.isSelected button))
     (is (= (.getText button)
 	   "text"))))
+
+(deftest checkbox-options-are-set
+  (abstract-button-options-are-set checkbox))
+
+(deftest radio-button-options-are-set
+  (abstract-button-options-are-set radio-button))
+
+(deftest toggle-button-options-are-set
+  (abstract-button-options-are-set toggle-button))
 
 (deftest button-group-initializes-context
   (let [context (make-context)
@@ -117,6 +99,36 @@
     (await agent)
     (is (= (:group @context)
 	   {:a false :b true :c false}))))
+
+(deftest text-field-initializes-context
+  (let [context (make-context)
+	text-field (text-field context :text :text "text")]
+    (is (contains? @context :text))
+    (is (= (:text @context)
+	   "text"))))
+
+(deftest text-field-changes-update-context
+  (let [context (make-context)
+	text-field (text-field context :text)]
+    (.setText text-field "Lorem Ipsum")
+    (is (= (:text @context)
+	   "Lorem Ipsum"))))
+
+(deftest text-field-mirrors-context
+  (let [context (make-context)
+	text-field (text-field context :text)
+	agent (agent nil)]
+    (update! context {:text "Lorem Ipsum"} false agent)
+    (await agent)
+    (is (= (.getText text-field)
+	   "Lorem Ipsum"))))
+
+(deftest text-field-options-are-set
+  (let [context (make-context)
+	text-field (text-field context :text :text "text" :enabled false)]
+    (is (= (.getText text-field)
+	   "text"))
+    (is (not (.isEnabled text-field)))))
 
 
 (deftest frame-options-are-set
