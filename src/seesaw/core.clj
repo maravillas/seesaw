@@ -11,54 +11,54 @@
 ;;;;;;;;;;;;;;;;;;;; Components with watches ;;;;;;;;;;;;;;;;;;;;
 
 (defn checkbox 
-  ([context key & options]
-     (doto (JCheckBox.)
-       (watch-checkbox context key)
-       (set-properties options))))
+  [context key & options]
+  (doto (JCheckBox.)
+    (watch-checkbox context key)
+    (set-properties options)))
 
 (defn text-field
-  ([context key & options]
-     (doto (JTextField.)
-       (watch-text-field context key)
-       (set-properties options))))
+  [context key & options]
+  (doto (JTextField.)
+    (watch-text-field context key)
+    (set-properties options)))
 
 (defn radio-button
-  ([context key & options]
-     (doto (JRadioButton.)
-       (watch-radio-button context key)
-       (set-properties options)
-       (set-action-command (keyword-str key)))))
+  [context key & options]
+  (doto (JRadioButton.)
+    (watch-radio-button context key)
+    (set-properties options)
+    (set-action-command (keyword-str key))))
 
 (defn button-group
-  ([context key value-fn & buttons]
-     (let [group (ButtonGroup.)]
-       (doseq [button buttons]
-	 (.add group button)
-	 (add-change-listener button
-			      (fn [evt]
-				(let [button-value {(keyword (.getActionCommand button))
-						    (value-fn button)}
-				      group-value (merge (key @context) button-value)]
-	      (update! context {key group-value})))))
-       (watch-button-group group context key value-fn))))
+  [context key value-fn & buttons]
+  (let [group (ButtonGroup.)]
+    (doseq [button buttons]
+      (.add group button)
+      (add-change-listener button
+			   (fn [evt]
+			     (let [button-value {(keyword (.getActionCommand button))
+						 (value-fn button)}
+				   group-value (merge (key @context) button-value)]
+			       (update! context {key group-value})))))
+    (watch-button-group group context key value-fn)))
 
 (defn radio-button-group
-  ([context key & buttons]
-     (apply button-group context key radio-button-selected? buttons)))
+  [context key & buttons]
+  (apply button-group context key radio-button-selected? buttons))
 
 ;;;;;;;;;;;;;;;;;;;; Components with no watches ;;;;;;;;;;;;;;;;;;;;
 
 (defn frame
-  ([& options]
-     (doto (JFrame.)
-       (set-properties options))))
+  [& options]
+  (doto (JFrame.)
+    (set-properties options)))
 
 (defn label
-  ([& options]
-     (doto (JLabel.)
-       (set-properties options))))
+  [& options]
+  (doto (JLabel.)
+    (set-properties options)))
 
 (defn button
-  ([& options]
-     (doto (JButton.)
-       (set-properties options))))
+  [& options]
+  (doto (JButton.)
+    (set-properties options)))
