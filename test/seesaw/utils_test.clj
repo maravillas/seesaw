@@ -2,14 +2,6 @@
   (:use [seesaw utils] :reload-all)
   (:use [clojure.test]))
 
-(deftest keyword-str-drops-one-colon
-  (is (= (keyword-str :keyword)
-	 "keyword"))
-  (is (= (keyword-str ::a)
-	 "seesaw.utils-test/a"))
-  (is (= (keyword-str :f:oo)
-	 "f:oo")))
-
 (deftest camel-case-camel-cases
   (is (= (camel-case "a-dashed-string")
 	 "ADashedString"))

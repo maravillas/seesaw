@@ -16,7 +16,7 @@
   (doto button
     (watch-button context key)
     (set-properties options)
-    (set-action-command (keyword-str key))))
+    (set-action-command (name key))))
 
 (defn checkbox 
   [context key & options]

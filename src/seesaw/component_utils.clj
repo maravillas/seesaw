@@ -34,7 +34,7 @@
   (enumeration-seq (.getElements button-group)))
 
 (defn find-button [button-group key]
-  (let [action-command (keyword-str key)]
+  (let [action-command (name key)]
     (some #(and (= (.getActionCommand %1) action-command) %1)
 	  (button-group-buttons button-group))))
 
