@@ -1,67 +1,80 @@
 (ns seesaw.component-utils
   (:use [seesaw utils]))
 
-(defn checkbox-selected? [checkbox]
+(defn checkbox-selected?
+  [checkbox]
   (.isSelected checkbox))
 
-(defn select-checkbox [checkbox selected]
+(defn select-checkbox
+  [checkbox selected]
   (.setSelected checkbox selected))
 
-
-(defn text-field-value [text-field]
+(defn text-field-value
+  [text-field]
   (.getText text-field))
 
-(defn set-text-field [text-field text]
+(defn set-text-field
+  [text-field text]
   (.setText text-field text))
 
-
-(defn button-selected? [button]
+(defn button-selected?
+  [button]
   (.isSelected button))
 
-(defn select-button [button selected]
+(defn select-button
+  [button selected]
   (.setSelected button selected))
 
-(defn add-to-group [button button-group]
+(defn add-to-group
+  [button button-group]
   (.add button-group button)
   button)
 
-(defn set-action-command [button command]
+(defn set-action-command
+  [button command]
   (.setActionCommand button command)
   button)
 
-
-(defn button-group-buttons [button-group]
+(defn button-group-buttons
+  [button-group]
   (enumeration-seq (.getElements button-group)))
 
-(defn find-button [button-group key]
+(defn find-button
+  [button-group key]
   (let [action-command (name key)]
     (some #(and (= (.getActionCommand %1) action-command) %1)
 	  (button-group-buttons button-group))))
 
-(defn button-group-value [group]
+(defn button-group-value
+  [group]
   (apply hash-map (mapcat (fn [button] [(keyword (.getActionCommand button))
 					(button-selected? button)])
 			  (enumeration-seq (.getElements group)))))
 
-(defn set-button-group [button-group new-value]
+(defn set-button-group
+  [button-group new-value]
   (doseq [key (keys new-value)]
     (let [button (find-button button-group key)
 	  model (.getModel button)
 	  value (key new-value)]
       (.setSelected button-group model value))))
 
-(defn listbox-values [listbox]
+(defn listbox-values
+  [listbox]
   (enumeration-seq (.. listbox getModel elements)))
 
-(defn set-listbox-values [listbox values]
+(defn set-listbox-values
+  [listbox values]
   (let [model (.getModel listbox)]
     (.removeAllElements model)
     (doseq [value values]
       (.addElement model value))))
 
-(defn listbox-selection [listbox]
+(defn listbox-selection
+  [listbox]
   (seq (.getSelectedValues listbox)))
 
-(defn set-listbox-selection [listbox values]
+(defn set-listbox-selection
+  [listbox values]
   (doseq [value values]
     (.setSelectedValue listbox value false)))
