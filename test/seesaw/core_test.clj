@@ -130,6 +130,11 @@
 	   "text"))
     (is (not (.isEnabled text-field)))))
 
+(deftest listbox-initializes-context
+  ; Next up
+  )
+
+
 
 (deftest frame-options-are-set
   (let [frame (frame :size [2 4] :visible false)]
@@ -149,3 +154,4 @@
     (is (= (.getText button)
 	   "text"))
     (is (not (.isEnabled button)))))
+

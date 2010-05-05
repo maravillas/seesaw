@@ -1,7 +1,7 @@
 (ns seesaw.component-utils-test
   (:use [seesaw component-utils] :reload-all)
   (:use [clojure.test])
-  (:import [javax.swing JCheckBox JTextField JRadioButton ButtonGroup]))
+  (:import [javax.swing JCheckBox JTextField JRadioButton ButtonGroup JList DefaultListModel ListSelectionModel]))
 
 (deftest checkbox-selected?-is-correct
   (let [checkbox (JCheckBox.)]
@@ -114,3 +114,45 @@
     (set-button-group group {:b1 true :b2 false})
     (is (= (button-group-value group)
 	   {:b1 true :b2 false}))))
+
+(defn- add-values-to-listbox
+  [listbox]
+  (let [model (.getModel listbox)]
+    (doseq [i (range 10)]
+      (.addElement model i))))
+
+(deftest listbox-values-gets-values
+  (let [listbox (JList. (DefaultListModel.))]
+    (add-values-to-listbox listbox)
+    (is (= (listbox-values listbox)
+	   (range 10)))))
+
+(deftest set-listbox-values-sets-values
+  (let [listbox (JList. (DefaultListModel.))]
+    (set-listbox-values listbox (range 10))
+    (is (= (enumeration-seq (.. listbox getModel elements))
+	   (range 10)))))
+
+(deftest listbox-selection-gets-single-selection
+  (let [listbox (JList. (DefaultListModel.))]
+    (.setSelectionMode listbox ListSelectionModel/SINGLE_SELECTION)
+    (add-values-to-listbox listbox)
+    (.setSelectedIndex listbox 3)
+    (is (= (listbox-selection listbox)
+	   [3]))))
+
+(deftest listbox-selection-gets-single-interval-selection
+  (let [listbox (JList. (DefaultListModel.))]
+    (.setSelectionMode listbox ListSelectionModel/SINGLE_INTERVAL_SELECTION)
+    (add-values-to-listbox listbox)
+    (.setSelectionInterval listbox 1 3)
+    (is (= (listbox-selection listbox)
+	   [1 2 3]))))
+
+(deftest listbox-selection-gets-multiple-interval-selection
+  (let [listbox (JList. (DefaultListModel.))]
+    (.setSelectionMode listbox ListSelectionModel/MULTIPLE_INTERVAL_SELECTION)
+    (add-values-to-listbox listbox)
+    (.setSelectedIndices listbox (into-array Integer/TYPE [1 3 4 7]))
+    (is (= (listbox-selection listbox)
+	   [1 3 4 7]))))

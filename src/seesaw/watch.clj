@@ -64,3 +64,27 @@
   (let [watch (watch-component button-group-value
 			       set-button-group)]
     (watch component context key)))
+
+(defn- add-listbox-value-listener
+  [component context key]
+  (add-list-data-listener (.getModel component)
+			  {:contents-changed update-from-event!
+			   :interval-added update-from-event!
+			   :interval-removed update-from-event!}
+			  context key #(listbox-values component)))
+
+(defn- add-listbox-selection-listener
+  [component context key]
+  (add-list-selection-listener component update-from-event!
+			       context key #(listbox-selection component)))
+
+(defn watch-listbox
+  [component context selection-key values-key]
+  (let [watch-value (watch-component listbox-values
+				     set-listbox-values
+				     add-listbox-value-listener)
+	watch-selection (watch-component listbox-selection
+					 set-listbox-selection
+					 add-listbox-selection-listener)]
+    (watch-value component context key)
+    (watch-selection component context key)))

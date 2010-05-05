@@ -49,3 +49,19 @@
 	  model (.getModel button)
 	  value (key new-value)]
       (.setSelected button-group model value))))
+
+(defn listbox-values [listbox]
+  (enumeration-seq (.. listbox getModel elements)))
+
+(defn set-listbox-values [listbox values]
+  (let [model (.getModel listbox)]
+    (.removeAllElements model)
+    (doseq [value values]
+      (.addElement model value))))
+
+(defn listbox-selection [listbox]
+  (seq (.getSelectedValues listbox)))
+
+(defn set-listbox-selection [listbox values]
+  (doseq [value values]
+    (.setSelectedValue listbox value false)))
