@@ -131,10 +131,35 @@
     (is (not (.isEnabled text-field)))))
 
 (deftest listbox-initializes-context
-  ; Next up
-  )
+  (let [context (make-context)
+	listbox (listbox context :selection :values ["foo" "bar" "baz"])]
+    (is (= (:values @context)
+	   ["foo" "bar" "baz"]))
+    (is (= (:selection @context)
+	   nil))))
 
+(deftest listbox-changes-update-context
+  (let [context (make-context)
+	listbox (listbox context :selection :values ["foo" "bar" "baz"])]
+    (.setSelectedIndex listbox 1)
+    (is (= (:selection @context)
+	   ["bar"]))
+    (.. listbox getModel (setElements ["foo" "bar" "baz" "quux"]))
+    (is (= (:values @context)
+	   (seq ["foo" "bar" "baz" "quux"])))))
 
+(deftest listbox-mirrors-context
+  (let [context (make-context)
+	listbox (listbox context :selection :values ["foo" "bar" "baz"])
+	agent (agent nil)]
+    (update! context {:selection ["foo"]} false agent)
+    (await agent)
+    (is (= (listbox-selection listbox)
+	   ["foo"]))
+    (update! context {:values ["oof" "rab" "zab"]} false agent)
+    (await agent)
+    (is (= (listbox-values listbox)
+	   (seq ["oof" "rab" "zab"])))))
 
 (deftest frame-options-are-set
   (let [frame (frame :size [2 4] :visible false)]

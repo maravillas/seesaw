@@ -1,5 +1,6 @@
 (ns seesaw.watch
-  (:use [seesaw spectator listeners component-utils]))
+  (:use [seesaw spectator listeners component-utils])
+  (:use [clojure.contrib.logging]))
 
 (defn- make-component-observer [key get-state set-state component]
   (fn [old new]
@@ -86,5 +87,5 @@
 	watch-selection (watch-component listbox-selection
 					 set-listbox-selection
 					 add-listbox-selection-listener)]
-    (watch-value component context key)
-    (watch-selection component context key)))
+    (watch-value component context values-key)
+    (watch-selection component context selection-key)))

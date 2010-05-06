@@ -1,7 +1,8 @@
 (ns seesaw.core
   (:use [seesaw listeners spectator watch component-utils utils])
   (:import [javax.swing JCheckBox JTextField JFrame JLabel JRadioButton
-	    ButtonGroup JButton JToggleButton JList]))
+	    ButtonGroup JButton JToggleButton JList])
+  (:import [seesaw.models SettableListModel]))
 
 (defn set-properties
   [component properties-values]
@@ -50,10 +51,12 @@
     (set-properties options)))
 
 (defn listbox
-  [context selection-key values-key & options]
-  (doto (JList.)
-    (watch-listbox context selection-key values-key)
-    (set-properties options)))
+  [context selection-key values-key initial-values & options]
+  (let [model (seesaw.models.SettableListModel.)]
+    (.setElements model initial-values)
+    (doto (JList. model)
+      (watch-listbox context selection-key values-key)
+      (set-properties options))))
 
 ;;;;;;;;;;;;;;;;;;;; Components with no watches ;;;;;;;;;;;;;;;;;;;;
 

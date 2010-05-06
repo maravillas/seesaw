@@ -61,14 +61,11 @@
 
 (defn listbox-values
   [listbox]
-  (enumeration-seq (.. listbox getModel elements)))
+  (.. listbox getModel getElements ))
 
 (defn set-listbox-values
   [listbox values]
-  (let [model (.getModel listbox)]
-    (.removeAllElements model)
-    (doseq [value values]
-      (.addElement model value))))
+  (.. listbox getModel (setElements values)))
 
 (defn listbox-selection
   [listbox]

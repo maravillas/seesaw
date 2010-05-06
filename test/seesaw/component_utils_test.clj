@@ -1,7 +1,8 @@
 (ns seesaw.component-utils-test
   (:use [seesaw component-utils] :reload-all)
   (:use [clojure.test])
-  (:import [javax.swing JCheckBox JTextField JRadioButton ButtonGroup JList DefaultListModel ListSelectionModel]))
+  (:import [javax.swing JCheckBox JTextField JRadioButton ButtonGroup JList ListSelectionModel]
+	   [seesaw.models SettableListModel]))
 
 (deftest checkbox-selected?-is-correct
   (let [checkbox (JCheckBox.)]
@@ -115,44 +116,43 @@
     (is (= (button-group-value group)
 	   {:b1 true :b2 false}))))
 
-(defn- add-values-to-listbox
-  [listbox]
-  (let [model (.getModel listbox)]
-    (doseq [i (range 10)]
-      (.addElement model i))))
-
 (deftest listbox-values-gets-values
-  (let [listbox (JList. (DefaultListModel.))]
-    (add-values-to-listbox listbox)
+  (let [listbox (JList. (SettableListModel.))]
+    (.. listbox getModel (setElements (range 10)))
     (is (= (listbox-values listbox)
 	   (range 10)))))
 
 (deftest set-listbox-values-sets-values
-  (let [listbox (JList. (DefaultListModel.))]
+  (let [listbox (JList. (SettableListModel.))]
     (set-listbox-values listbox (range 10))
-    (is (= (enumeration-seq (.. listbox getModel elements))
+    (is (= (.. listbox getModel getElements)
 	   (range 10)))))
 
 (deftest listbox-selection-gets-single-selection
-  (let [listbox (JList. (DefaultListModel.))]
+  (let [listbox (JList. (SettableListModel.))]
     (.setSelectionMode listbox ListSelectionModel/SINGLE_SELECTION)
-    (add-values-to-listbox listbox)
+    (.. listbox getModel (setElements (range 10)))
     (.setSelectedIndex listbox 3)
     (is (= (listbox-selection listbox)
 	   [3]))))
 
 (deftest listbox-selection-gets-single-interval-selection
-  (let [listbox (JList. (DefaultListModel.))]
+  (let [listbox (JList. (SettableListModel.))]
     (.setSelectionMode listbox ListSelectionModel/SINGLE_INTERVAL_SELECTION)
-    (add-values-to-listbox listbox)
+    (.. listbox getModel (setElements (range 10)))
     (.setSelectionInterval listbox 1 3)
     (is (= (listbox-selection listbox)
 	   [1 2 3]))))
 
 (deftest listbox-selection-gets-multiple-interval-selection
-  (let [listbox (JList. (DefaultListModel.))]
+  (let [listbox (JList. (SettableListModel.))]
     (.setSelectionMode listbox ListSelectionModel/MULTIPLE_INTERVAL_SELECTION)
-    (add-values-to-listbox listbox)
+    (.. listbox getModel (setElements (range 10)))
     (.setSelectedIndices listbox (into-array Integer/TYPE [1 3 4 7]))
     (is (= (listbox-selection listbox)
 	   [1 3 4 7]))))
+
+(deftest listbox-selection-returns-nil-when-no-selection
+  (let [listbox (JList. (SettableListModel.))]
+    (.. listbox getModel (setElements (range 10)))
+    (is (= (listbox-selection listbox)))))
