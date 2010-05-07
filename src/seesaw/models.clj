@@ -6,14 +6,14 @@
  :implements [javax.swing.ListModel]
  :prefix "list-model-"
  :init init
- :constructors {[] []}
+ :constructors {[clojure.lang.Seqable] []}
  :methods [[setElements [clojure.lang.Seqable] void]
 	   [getElements [] clojure.lang.Seqable]]
  :state state)
 
 (defn list-model-init
-  []
-  [[] (ref {:listeners [] :elements []})])
+  ([elements]
+     [[] (ref {:listeners [] :elements elements})]))
 
 (defn list-model-addListDataListener
   [this listener]

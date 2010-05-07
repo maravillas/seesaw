@@ -4,19 +4,18 @@
   (:use [clojure.test]))
 
 (deftest list-model-sets-elements
-  (let [model (SettableListModel.)]
+  (let [model (SettableListModel. [])]
     (.setElements model (range 4))
     (is (= (.getElements model)
 	   (range 4)))))
 
 (deftest list-model-gets-size
-  (let [model (SettableListModel.)]
-    (.setElements model (range 4))
+  (let [model (SettableListModel. (range 4))]
     (is (= (.getSize model)
 	   4))))
 
 (deftest list-model-notifies-listeners
-  (let [model (SettableListModel.)
+  (let [model (SettableListModel. [])
 	ref (ref false)
 	ran-fn #(dosync (ref-set ref %))]
     (.addListDataListener model (proxy [ListDataListener] []
@@ -28,3 +27,8 @@
 	 0 (.getIndex0 @ref)
 	 2 (.getIndex1 @ref)
 	 ListDataEvent/CONTENTS_CHANGED (.getType @ref))))
+
+(deftest list-model-accepts-initial-elements
+  (let [model (SettableListModel. (range 4))]
+    (is (= (.getElements model)
+	   (range 4)))))

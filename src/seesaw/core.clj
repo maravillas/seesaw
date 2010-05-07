@@ -52,8 +52,7 @@
 
 (defn listbox
   [context selection-key values-key initial-values & options]
-  (let [model (seesaw.models.SettableListModel.)]
-    (.setElements model initial-values)
+  (let [model (SettableListModel. initial-values)]
     (doto (JList. model)
       (watch-listbox context selection-key values-key)
       (set-properties options))))

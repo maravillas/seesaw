@@ -117,42 +117,37 @@
 	   {:b1 true :b2 false}))))
 
 (deftest listbox-values-gets-values
-  (let [listbox (JList. (SettableListModel.))]
-    (.. listbox getModel (setElements (range 10)))
+  (let [listbox (JList. (SettableListModel. (range 10)))]
     (is (= (listbox-values listbox)
 	   (range 10)))))
 
 (deftest set-listbox-values-sets-values
-  (let [listbox (JList. (SettableListModel.))]
+  (let [listbox (JList. (SettableListModel. []))]
     (set-listbox-values listbox (range 10))
     (is (= (.. listbox getModel getElements)
 	   (range 10)))))
 
 (deftest listbox-selection-gets-single-selection
-  (let [listbox (JList. (SettableListModel.))]
+  (let [listbox (JList. (SettableListModel. (range 10)))]
     (.setSelectionMode listbox ListSelectionModel/SINGLE_SELECTION)
-    (.. listbox getModel (setElements (range 10)))
     (.setSelectedIndex listbox 3)
     (is (= (listbox-selection listbox)
 	   [3]))))
 
 (deftest listbox-selection-gets-single-interval-selection
-  (let [listbox (JList. (SettableListModel.))]
+  (let [listbox (JList. (SettableListModel. (range 10)))]
     (.setSelectionMode listbox ListSelectionModel/SINGLE_INTERVAL_SELECTION)
-    (.. listbox getModel (setElements (range 10)))
     (.setSelectionInterval listbox 1 3)
     (is (= (listbox-selection listbox)
 	   [1 2 3]))))
 
 (deftest listbox-selection-gets-multiple-interval-selection
-  (let [listbox (JList. (SettableListModel.))]
+  (let [listbox (JList. (SettableListModel. (range 10)))]
     (.setSelectionMode listbox ListSelectionModel/MULTIPLE_INTERVAL_SELECTION)
-    (.. listbox getModel (setElements (range 10)))
     (.setSelectedIndices listbox (into-array Integer/TYPE [1 3 4 7]))
     (is (= (listbox-selection listbox)
 	   [1 3 4 7]))))
 
 (deftest listbox-selection-returns-nil-when-no-selection
-  (let [listbox (JList. (SettableListModel.))]
-    (.. listbox getModel (setElements (range 10)))
+  (let [listbox (JList. (SettableListModel. (range 10)))]
     (is (= (listbox-selection listbox)))))
