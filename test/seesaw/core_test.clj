@@ -203,5 +203,5 @@
     (is (not (.isEnabled button)))))
 
 (deftest scroll-pane-options-are-set
-  (let [scroll-pane (scroll-pane :wheel-scrolling-enabled false)]
+  (let [scroll-pane (scroll-pane (label) :wheel-scrolling-enabled false)]
     (is (not (.isWheelScrollingEnabled scroll-pane)))))

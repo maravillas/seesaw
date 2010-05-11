@@ -81,6 +81,6 @@
     (set-properties options)))
 
 (defn scroll-pane
-  [& options]
-  (doto (javax.swing.JScrollPane.)
+  [component & options]
+  (doto (javax.swing.JScrollPane. component)
     (set-properties options)))
