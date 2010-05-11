@@ -39,12 +39,12 @@
 			   {:changed update-from-event!
 			    :insert update-from-event!
 			    :delete update-from-event!}
-			   context key #(text-field-value component)))
+			   context key #(text-value component)))
 
 (defn watch-text-field
   [component context key]
-  (let [watch (watch-component text-field-value
-			       set-text-field
+  (let [watch (watch-component text-value
+			       set-text
 			       add-text-field-listeners)]
     (watch component context key)))
 
@@ -96,11 +96,11 @@
 			 {:changed update-from-event!
 			  :insert update-from-event!
 			  :remove update-from-event!}
-			 context key #(text-pane-value component)))
+			 context key #(text-value component)))
 
 (defn watch-text-pane
   [component context key]
-  (let [watch (watch-component text-pane-value
-			       set-text-pane
+  (let [watch (watch-component text-value
+			       set-text
 			       add-text-pane-listener)]
     (watch component context key)))

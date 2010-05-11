@@ -9,13 +9,13 @@
   [checkbox selected]
   (.setSelected checkbox selected))
 
-(defn text-field-value
-  [text-field]
-  (.getText text-field))
+(defn text-value
+  [text-component]
+  (.getText text-component))
 
-(defn set-text-field
-  [text-field text]
-  (.setText text-field text))
+(defn set-text
+  [text-component text]
+  (.setText text-component text))
 
 (defn button-selected?
   [button]
@@ -76,10 +76,3 @@
   (doseq [value values]
     (.setSelectedValue listbox value false)))
 
-(defn text-pane-value
-  [text-pane]
-  (.getText text-pane))
-
-(defn set-text-pane
-  [text-pane text]
-  (.setText text-pane text))

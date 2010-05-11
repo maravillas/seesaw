@@ -180,7 +180,7 @@
 	agent (agent nil)]
     (update! context {:text "Lorem ipsum"} false agent)
     (await agent)
-    (is (= (text-pane-value text-pane)
+    (is (= (text-value text-pane)
 	   "Lorem ipsum"))))
 
 (deftest frame-options-are-set

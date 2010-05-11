@@ -20,15 +20,15 @@
     (select-checkbox checkbox false)
     (is (not (.isSelected checkbox)))))
 
-(deftest text-field-value-gets-text
+(deftest text-value-gets-text
   (let [text-field (JTextField.)]
     (.setText text-field "Lorem ipsum")
-    (is (= (text-field-value text-field)
+    (is (= (text-value text-field)
 	   "Lorem ipsum"))))
 
-(deftest set-text-field-sets-text
+(deftest set-text-sets-text
   (let [text-field (JTextField.)]
-    (set-text-field text-field "...dolor sit amet")
+    (set-text text-field "...dolor sit amet")
     (is (= (.getText text-field)
 	   "...dolor sit amet"))))
 
