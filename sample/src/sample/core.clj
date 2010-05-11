@@ -21,16 +21,18 @@
   (BasicConfigurator/configure)
   (javax.swing.UIManager/setLookAndFeel (javax.swing.UIManager/getSystemLookAndFeelClassName))
   (let [context (make-context)
-	frame (frame "Seesaw Sample")
-	celsius (text-field context :celsius 5)
-	fahrenheit (text-field context :fahrenheit 5)
-	celsius-label (label "Celsius:")
-	fahrenheit-label (label "Fahrenheit:")]
+	frame (frame :title "Seesaw Sample")
+	celsius (text-field context :celsius :columns 5)
+	fahrenheit (text-field context :fahrenheit :columns 5)
+	celsius-label (label :text "Celsius:")
+	fahrenheit-label (label :text "Fahrenheit:")]
     (add-updater! context (fn [old new]
-			    {:celsius (str (fahrenheit-to-celsius (parse-int (:fahrenheit new))))})
+			    {:celsius (str (fahrenheit-to-celsius
+					    (parse-int (:fahrenheit new))))})
 		  :fahrenheit)
     (add-updater! context (fn [old new]
-			    {:fahrenheit (str (celsius-to-fahrenheit (parse-int (:celsius new))))})
+			    {:fahrenheit (str (celsius-to-fahrenheit
+					       (parse-int (:celsius new))))})
 		  :celsius)
     (doto frame
       (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
