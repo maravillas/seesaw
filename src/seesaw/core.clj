@@ -1,7 +1,5 @@
 (ns seesaw.core
   (:use [seesaw listeners spectator watch component-utils utils])
-  (:import [javax.swing JCheckBox JTextField JFrame JLabel JRadioButton
-	    ButtonGroup JButton JToggleButton JList JTextPane JScrollPane])
   (:import [seesaw.models SettableListModel]))
 
 (defn set-properties
@@ -21,19 +19,19 @@
 
 (defn checkbox 
   [context key & options]
-  (apply abstract-button (JCheckBox.) context key options))
+  (apply abstract-button (javax.swing.JCheckBox.) context key options))
 
 (defn radio-button
   [context key & options]
-  (apply abstract-button (JRadioButton.) context key options))
+  (apply abstract-button (javax.swing.JRadioButton.) context key options))
 
 (defn toggle-button
   [context key & options]
-  (apply abstract-button (JToggleButton.) context key options))
+  (apply abstract-button (javax.swing.JToggleButton.) context key options))
 
 (defn button-group
   [context key & buttons]
-  (let [group (ButtonGroup.)]
+  (let [group (javax.swing.ButtonGroup.)]
     (doseq [button buttons]
       (.add group button)
       (add-change-listener button
@@ -46,20 +44,20 @@
 
 (defn text-field
   [context key & options]
-  (doto (JTextField.)
+  (doto (javax.swing.JTextField.)
     (watch-text-field context key)
     (set-properties options)))
 
 (defn listbox
   [context selection-key values-key initial-values & options]
   (let [model (SettableListModel. initial-values)]
-    (doto (JList. model)
+    (doto (javax.swing.JList. model)
       (watch-listbox context selection-key values-key)
       (set-properties options))))
 
 (defn text-pane
   [context key & options]
-  (doto (JTextPane.)
+  (doto (javax.swing.JTextPane.)
     (watch-text-pane context key)
     (set-properties options)))
 
@@ -67,22 +65,22 @@
 
 (defn frame
   [& options]
-  (doto (JFrame.)
+  (doto (javax.swing.JFrame.)
     (set-properties options)))
 
 (defn label
   [& options]
-  (doto (JLabel.)
+  (doto (javax.swing.JLabel.)
     (set-properties options)))
 
 ;; Although JButtons derive from AbstractButtons, they have no state to track.
 
 (defn button
   [& options]
-  (doto (JButton.)
+  (doto (javax.swing.JButton.)
     (set-properties options)))
 
 (defn scroll-pane
   [& options]
-  (doto (JScrollPane.)
+  (doto (javax.swing.JScrollPane.)
     (set-properties options)))
