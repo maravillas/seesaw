@@ -1,7 +1,7 @@
 (ns seesaw.core
   (:use [seesaw listeners spectator watch component-utils utils])
   (:import [javax.swing JCheckBox JTextField JFrame JLabel JRadioButton
-	    ButtonGroup JButton JToggleButton JList])
+	    ButtonGroup JButton JToggleButton JList JTextPane])
   (:import [seesaw.models SettableListModel]))
 
 (defn set-properties
@@ -56,6 +56,12 @@
     (doto (JList. model)
       (watch-listbox context selection-key values-key)
       (set-properties options))))
+
+(defn text-pane
+  [context key & options]
+  (doto (JTextPane.)
+    (watch-text-pane context key)
+    (set-properties options)))
 
 ;;;;;;;;;;;;;;;;;;;; Components with no watches ;;;;;;;;;;;;;;;;;;;;
 

@@ -75,3 +75,11 @@
   [listbox values]
   (doseq [value values]
     (.setSelectedValue listbox value false)))
+
+(defn text-pane-value
+  [text-pane]
+  (.getText text-pane))
+
+(defn set-text-pane
+  [text-pane text]
+  (.setText text-pane text))

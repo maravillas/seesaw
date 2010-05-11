@@ -89,3 +89,18 @@
 					 add-listbox-selection-listener)]
     (watch-value component context values-key)
     (watch-selection component context selection-key)))
+
+(defn- add-text-pane-listener
+  [component context key]
+  (add-document-listener (.getDocument component)
+			 {:changed update-from-event!
+			  :insert update-from-event!
+			  :remove update-from-event!}
+			 context key #(text-pane-value component)))
+
+(defn watch-text-pane
+  [component context key]
+  (let [watch (watch-component text-pane-value
+			       set-text-pane
+			       add-text-pane-listener)]
+    (watch component context key)))

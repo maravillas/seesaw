@@ -161,6 +161,28 @@
     (is (= (listbox-values listbox)
 	   (seq ["oof" "rab" "zab"])))))
 
+(deftest text-pane-initializes-context
+  (let [context (make-context)
+	text-pane (text-pane context :text :text "Text")]
+    (is (= (:text @context)
+	   "Text"))))
+
+(deftest text-pane-changes-update-context
+  (let [context (make-context)
+	text-pane (text-pane context :text)]
+    (.setText text-pane "Lorem ipsum")
+    (is (= (:text @context)
+	   "Lorem ipsum"))))
+
+(deftest text-pane-mirrors-context
+  (let [context (make-context)
+	text-pane (text-pane context :text)
+	agent (agent nil)]
+    (update! context {:text "Lorem ipsum"} false agent)
+    (await agent)
+    (is (= (text-pane-value text-pane)
+	   "Lorem ipsum"))))
+
 (deftest frame-options-are-set
   (let [frame (frame :size [2 4] :visible false)]
     (is (= (.getSize frame)
