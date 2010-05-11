@@ -1,7 +1,7 @@
 (ns seesaw.core
   (:use [seesaw listeners spectator watch component-utils utils])
   (:import [javax.swing JCheckBox JTextField JFrame JLabel JRadioButton
-	    ButtonGroup JButton JToggleButton JList JTextPane])
+	    ButtonGroup JButton JToggleButton JList JTextPane JScrollPane])
   (:import [seesaw.models SettableListModel]))
 
 (defn set-properties
@@ -80,4 +80,9 @@
 (defn button
   [& options]
   (doto (JButton.)
+    (set-properties options)))
+
+(defn scroll-pane
+  [& options]
+  (doto (JScrollPane.)
     (set-properties options)))
