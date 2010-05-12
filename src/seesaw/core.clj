@@ -2,13 +2,34 @@
   (:use [seesaw listeners spectator watch component-utils utils])
   (:import [seesaw.models SettableListModel]))
 
+;; Helpful functions
+
 (defn set-properties
   [component properties-values]
   (doseq [[prop val] (partition 2 properties-values)]
     (let [val (if (coll? val) val [val])]
       (apply str-invoke (keyword-to-setter prop) component val))))
 
-;;;;;;;;;;;;;;;;;;;; Components with watches ;;;;;;;;;;;;;;;;;;;;
+(defn use-system-look-and-feel
+  []
+  (javax.swing.UIManager/setLookAndFeel
+   (javax.swing.UIManager/getSystemLookAndFeelClassName)))
+
+(defn add-to
+  [parent & children]
+  (doseq [child children]
+    (.add parent child)))
+
+(defn prepare-frame
+  [frame layout & children]
+  (apply add-to frame children)
+  (doto frame
+    (.setDefaultCloseOperation javax.swing.JFrame/EXIT_ON_CLOSE)
+    (.setLayout layout)
+    .pack
+    .show))
+
+;; Components with watches
 
 (defn- abstract-button
   [button context key & options]
@@ -61,7 +82,8 @@
     (watch-text-pane context key)
     (set-properties options)))
 
-;;;;;;;;;;;;;;;;;;;; Components with no watches ;;;;;;;;;;;;;;;;;;;;
+
+;; Components without watches
 
 (defn frame
   [& options]

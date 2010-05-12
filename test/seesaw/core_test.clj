@@ -2,6 +2,20 @@
   (:use [seesaw core spectator component-utils] :reload-all)
   (:use [clojure.test]))
 
+(deftest uses-system-look-and-feel
+  (use-system-look-and-feel)
+  (is (= (.getName (class (javax.swing.UIManager/getLookAndFeel)))
+	 (javax.swing.UIManager/getSystemLookAndFeelClassName))))
+
+(deftest adds-children-to-parent
+  (let [parent (javax.swing.JFrame.)
+	child1 (javax.swing.JPanel.)
+	child2 (javax.swing.JPanel.)]
+    (add-to parent child1 child2)
+    (are [p c] (.isAncestorOf p c)
+	 parent child1
+	 parent child2)))
+
 (defn abstract-button-initializes-context
   [button-fn]
   (let [context (make-context)

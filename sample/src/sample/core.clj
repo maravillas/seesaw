@@ -19,7 +19,7 @@
 
 (defn -main []
   (BasicConfigurator/configure)
-  (javax.swing.UIManager/setLookAndFeel (javax.swing.UIManager/getSystemLookAndFeelClassName))
+  (use-system-look-and-feel)
   (let [context (make-context)
 	frame (frame :title "Seesaw Sample")
 	celsius (text-field context :celsius :columns 5)
@@ -34,13 +34,9 @@
 			    {:fahrenheit (str (celsius-to-fahrenheit
 					       (parse-int (:celsius new))))})
 		  :celsius)
-    (doto frame
-      (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
-      (.setLayout (FlowLayout.))
-      (.add fahrenheit-label)
-      (.add fahrenheit)
-      (.add celsius-label)
-      (.add celsius)
-      .pack
-      .show)))
+    (prepare-frame frame (FlowLayout.)
+		   fahrenheit-label
+		   fahrenheit
+		   celsius-label
+		   celsius)))
     
