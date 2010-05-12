@@ -21,12 +21,22 @@
   (doseq [[child constraint] (partition 2 children-constraints)]
     (.add parent child constraint)))
 
+(defn- exit-ok?
+  []
+  (let [perm (java.lang.RuntimePermission. "exitVM" nil)
+	manager (System/getSecurityManager)]
+    (try
+     (.checkPermission manager perm)
+     (catch NullPointerException _ false)
+     (catch SecurityException _ false))))
+
 (defn prepare-frame
-  [frame layout & children]
-  (apply add-to frame children)
+  [frame layout & children-constraints]
+  (.setLayout frame layout)
+  (apply add-to frame children-constraints)
+  (when exit-ok?
+    (.setDefaultCloseOperation frame javax.swing.JFrame/EXIT_ON_CLOSE))
   (doto frame
-    (.setDefaultCloseOperation javax.swing.JFrame/EXIT_ON_CLOSE)
-    (.setLayout layout)
     .pack
     .show))
 

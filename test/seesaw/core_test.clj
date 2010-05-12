@@ -1,6 +1,7 @@
 (ns seesaw.core-test
   (:use [seesaw core spectator component-utils] :reload-all)
-  (:use [clojure.test]))
+  (:use [clojure.test])
+  (:import [javax.swing JFrame JPanel]))
 
 (deftest uses-system-look-and-feel
   (use-system-look-and-feel)
@@ -8,16 +9,31 @@
 	 (javax.swing.UIManager/getSystemLookAndFeelClassName))))
 
 (deftest adds-children-to-parent
-  (let [parent (javax.swing.JFrame.)
-	child1 (javax.swing.JPanel.)
-	child2 (javax.swing.JPanel.)]
+  (let [parent (JFrame.)
+	child1 (JPanel.)
+	child2 (JPanel.)]
     (.setLayout parent (mig-layout))
     (add-to parent
 	    child1 ""
 	    child2 "")
     (are [p c] (.isAncestorOf p c)
 	 parent child1 
-	 parent child2)))
+	 parent child2)
+    (.dispose parent)))
+
+(deftest prepares-frame
+  (let [parent (JFrame.)
+	child1 (JPanel.)
+	child2 (JPanel.)
+	layout (mig-layout)]
+    (prepare-frame parent layout
+		   child1 ""
+		   child2 "")
+    (are [p c] (.isAncestorOf p c)
+	 parent child1
+	 parent child2)
+    (is (.isShowing parent))
+    (.dispose parent)))
 
 (defn abstract-button-initializes-context
   [button-fn]
@@ -204,7 +220,8 @@
   (let [frame (frame :size [2 4] :visible false)]
     (is (= (.getSize frame)
 	   (java.awt.Dimension. 2 4)))
-    (is (not (.isVisible frame)))))
+    (is (not (.isVisible frame)))
+    (.dispose frame)))
 
 (deftest label-options-are-set
   (let [label (label :text "text" :tool-tip-text "tool tip!")]
