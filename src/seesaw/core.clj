@@ -106,3 +106,8 @@
   [component & options]
   (doto (javax.swing.JScrollPane. component)
     (set-properties options)))
+
+(defn panel
+  [& options]
+  (doto (javax.swing.JPanel.)
+    (set-properties options)))

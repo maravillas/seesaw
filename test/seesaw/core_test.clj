@@ -219,3 +219,9 @@
 (deftest scroll-pane-options-are-set
   (let [scroll-pane (scroll-pane (label) :wheel-scrolling-enabled false)]
     (is (not (.isWheelScrollingEnabled scroll-pane)))))
+
+(deftest panel-options-are-set
+  (let [panel (panel :visible false :tool-tip-text "Tool tip")]
+    (is (not (.isVisible panel)))
+    (is (= (.getToolTipText panel)
+	   "Tool tip"))))

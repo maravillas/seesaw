@@ -1,8 +1,6 @@
 (ns sample.core
   (:gen-class)
   (:use [seesaw core spectator])
-  (:use clojure.stacktrace)
-  (:use clojure.contrib.logging)
   (:import [java.awt FlowLayout]
 	   [javax.swing JFrame]
 	   [org.apache.log4j BasicConfigurator]))
