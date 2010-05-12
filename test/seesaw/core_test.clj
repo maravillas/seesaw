@@ -11,9 +11,12 @@
   (let [parent (javax.swing.JFrame.)
 	child1 (javax.swing.JPanel.)
 	child2 (javax.swing.JPanel.)]
-    (add-to parent child1 child2)
+    (.setLayout parent (mig-layout))
+    (add-to parent
+	    child1 ""
+	    child2 "")
     (are [p c] (.isAncestorOf p c)
-	 parent child1
+	 parent child1 
 	 parent child2)))
 
 (defn abstract-button-initializes-context

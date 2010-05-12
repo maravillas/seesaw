@@ -16,9 +16,10 @@
    (javax.swing.UIManager/getSystemLookAndFeelClassName)))
 
 (defn add-to
-  [parent & children]
-  (doseq [child children]
-    (.add parent child)))
+  [parent & children-constraints]
+  {:pre [(even? (count children-constraints))]}
+  (doseq [[child constraint] (partition 2 children-constraints)]
+    (.add parent child constraint)))
 
 (defn prepare-frame
   [frame layout & children]
@@ -95,8 +96,6 @@
   (doto (javax.swing.JLabel.)
     (set-properties options)))
 
-;; Although JButtons derive from AbstractButtons, they have no state to track.
-
 (defn button
   [& options]
   (doto (javax.swing.JButton.)
@@ -111,3 +110,18 @@
   [& options]
   (doto (javax.swing.JPanel.)
     (set-properties options)))
+
+;; Layout
+
+(defn mig-layout
+  ([]
+     (net.miginfocom.swing.MigLayout.))
+  ([layout-constraints]
+     (net.miginfocom.swing.MigLayout. layout-constraints))
+  ([layout-constraints column-constraints]
+     (net.miginfocom.swing.MigLayout. layout-constraints
+				      column-constraints))
+  ([layout-constraints column-constraints row-constraints]
+     (net.miginfocom.swing.MigLayout. layout-constraints
+				      column-constraints
+				      row-constraints)))
